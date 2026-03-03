@@ -1,0 +1,31 @@
+import React, { useEffect, useState } from 'react';
+import PageHeader from '../components/PageHeader';
+import Card from '../components/Card';
+import ShopItemCard from '../components/ShopItemCard';
+import axios from 'axios';
+
+export default function Shop({ user }) {
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    axios.get('/api/shop').then(r => setItems(r.data)).catch(()=>{});
+  }, []);
+
+  return (
+    <div>
+      <PageHeader title="Shop" subtitle="Spend your points on cool swag and perks." />
+
+      <div className="flex justify-center mb-4">
+        <Card className="w-full max-w-2xl text-center">
+          <div className="text-sm text-gray-500">Your points</div>
+          <div className="text-3xl font-bold text-teal600">{user?.points}</div>
+          <p className="text-sm text-gray-600 mt-2">Shop items below cost points. Click More info for details.</p>
+          <button className="mt-3 w-full bg-white border border-gray-200 px-4 py-2 rounded">Your orders</button>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        {items.map(it => <ShopItemCard key={it.id} item={it} userPoints={user?.points} />)}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,26 @@
+import React, { useEffect, useState } from 'react';
+import PageHeader from '../components/PageHeader';
+import Card from '../components/Card';
+import ProjectCard from '../components/ProjectCard';
+import axios from 'axios';
+
+export default function Projects({ user }) {
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    axios.get('/api/projects?userId=1').then(r => setProjects(r.data)).catch(()=>{});
+  }, []);
+  return (
+    <div>
+      <PageHeader title="My Projects" subtitle="All your projects in one place." />
+      <div className="flex justify-between items-center mb-4">
+        <div className="text-sm text-gray-600">Filter: <strong>All</strong></div>
+        <button className="bg-teal600 text-white px-3 py-1 rounded">Create new project</button>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        {projects.map(p => <ProjectCard key={p.id} project={p} />)}
+        {projects.length === 0 && <Card>No projects yet</Card>}
+      </div>
+    </div>
+  );
+}

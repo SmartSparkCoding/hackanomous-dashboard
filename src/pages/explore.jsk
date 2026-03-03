@@ -1,0 +1,14 @@
+import React from 'react';
+import PageHeader from '../components/PageHeader';
+import Card from '../components/Card';
+
+export default function Explore() {
+  return (
+    <div>
+      <PageHeader title="Explore" subtitle="Discover projects and items from the community." />
+      <Card>
+        <p className="text-gray-600">Explore content will go here.</p>
+      </Card>
+    </div>
+  );
+}
