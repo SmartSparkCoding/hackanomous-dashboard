@@ -3,54 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Hackanomous Dashboard</title>
+  <title>Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div id="app" class="app">
-    <!-- Main layout: content + sidebar (sidebar side toggled by JS) -->
-    <main class="main-area" id="mainArea">
-      <header class="topbar">
-        <div class="left-controls">
-          <button id="toggleSidebarBtn" class="btn small">Move sidebar</button>
-          <nav class="mini-nav" aria-label="quick nav">
-            <button class="link" data-route="dashboard">Dashboard</button>
-            <button class="link" data-route="projects">Projects</button>
-            <button class="link" data-route="explore">Explore</button>
-            <button class="link" data-route="shop">Shop</button>
-          </nav>
-        </div>
-        <div class="brand">Hackanomous</div>
-      </header>
-
-      <section id="pageContent" class="page-content" role="main" tabindex="-1">
-        <!-- JS will render pages here -->
-      </section>
-    </main>
-
-    <aside id="sidebar" class="sidebar sidebar-right" aria-label="Main menu">
+    <aside id="sidebar" class="sidebar" aria-label="Main menu">
       <div class="sidebar-inner">
         <div class="sidebar-top">
-          <div class="logo-wrap" aria-hidden="true">
-            <!-- simple SVG logo -->
-            <svg width="48" height="48" viewBox="0 0 24 24" class="logo">
-              <rect width="24" height="24" rx="6" fill="#2EC4B6"></rect>
-              <text x="12" y="16" text-anchor="middle" font-family="Inter,system-ui" font-weight="700" font-size="12" fill="#042028">H</text>
-            </svg>
-            <div class="brand-name">Hackanomous</div>
-          </div>
+          <div class="spacer"></div>
         </div>
 
         <nav class="sidebar-nav" role="navigation" aria-label="Primary">
-          <button class="nav-item" data-route="dashboard"><span class="nav-icon">🏠</span> Dashboard</button>
-          <button class="nav-item" data-route="projects"><span class="nav-icon">📁</span> My Projects</button>
-          <button class="nav-item" data-route="explore"><span class="nav-icon">🔎</span> Explore</button>
-          <button class="nav-item" data-route="shop"><span class="nav-icon">🛒</span> Shop</button>
+          <button class="nav-item" data-route="dashboard" aria-current="page">Dashboard</button>
+          <button class="nav-item" data-route="projects">My Projects</button>
+          <button class="nav-item" data-route="explore">Explore</button>
+          <button class="nav-item" data-route="shop">Shop</button>
         </nav>
 
         <div class="sidebar-bottom">
           <div class="profile">
-            <div class="pfp" id="pfp">J</div>
+            <div id="pfp" class="pfp-square" aria-hidden="true">J</div>
             <div class="profile-meta">
               <div id="profileName" class="profile-name">Jacob</div>
               <div class="profile-points">Points: <span id="profilePoints">1240</span></div>
@@ -62,12 +35,19 @@
         </div>
       </div>
     </aside>
+
+    <main id="main" class="main">
+      <div id="pageContent" class="page-content" role="main" tabindex="-1"></div>
+    </main>
   </div>
 
+  <!-- Templates -->
   <template id="dashboardTpl">
     <section class="page">
-      <h1 class="page-title">Dashboard</h1>
-      <p class="subtitle">Welcome back — here’s what’s new.</p>
+      <div class="page-header">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="subtitle">Welcome back — here’s what’s new.</p>
+      </div>
 
       <div class="card projects-card">
         <div class="card-head">
@@ -77,28 +57,38 @@
         <div class="card-body projects-grid" id="projectsPreview"></div>
       </div>
 
-      <div class="announcements" id="announcementsList"></div>
+      <div id="announcementsList" class="announcements"></div>
     </section>
   </template>
 
   <template id="projectsTpl">
     <section class="page">
-      <h1 class="page-title">My Projects</h1>
-      <p class="subtitle">All your projects in one place.</p>
+      <div class="page-header">
+        <h1 class="page-title">My Projects</h1>
+        <p class="subtitle">All your projects in one place.</p>
+      </div>
 
       <div class="controls-row">
-        <div class="filters">Filter: <select id="projectFilter"><option value="all">All</option><option value="active">Active</option><option value="archived">Archived</option></select></div>
+        <div class="filters">Filter:
+          <select id="projectFilter">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="archived">Archived</option>
+          </select>
+        </div>
         <div><button id="createProjectBtn" class="btn">Create new project</button></div>
       </div>
 
-      <div class="grid projects-grid" id="projectsList"></div>
+      <div id="projectsList" class="grid projects-grid"></div>
     </section>
   </template>
 
   <template id="shopTpl">
     <section class="page">
-      <h1 class="page-title">Shop</h1>
-      <p class="subtitle">Spend your points on club swag and perks.</p>
+      <div class="page-header">
+        <h1 class="page-title">Shop</h1>
+        <p class="subtitle">Spend your points on club swag and perks.</p>
+      </div>
 
       <div class="center-box">
         <div class="points-box card">
@@ -109,17 +99,28 @@
         </div>
       </div>
 
-      <div class="grid shop-grid" id="shopItems"></div>
+      <div id="shopItems" class="grid shop-grid"></div>
     </section>
   </template>
 
   <template id="exploreTpl">
     <section class="page">
-      <h1 class="page-title">Explore</h1>
-      <p class="subtitle">Discover projects and items from the community.</p>
+      <div class="page-header">
+        <h1 class="page-title">Explore</h1>
+        <p class="subtitle">Discover projects and items from the community.</p>
+      </div>
       <div class="card"><p class="muted">Explore content will appear here.</p></div>
     </section>
   </template>
+
+  <!-- Modal for project / item details -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-panel" role="document" id="modalPanel">
+      <button id="modalClose" class="modal-close" aria-label="Close">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
 
   <script src="script.js" defer></script>
 </body>
